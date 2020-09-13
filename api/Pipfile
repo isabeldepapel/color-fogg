@@ -7,8 +7,9 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-requests = "*"
 flask = "*"
+python-dotenv = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
