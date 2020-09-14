@@ -11,12 +11,16 @@ app = Flask(__name__)
 @app.route('/result', methods = ['POST'])
 def get_artwork_by_color():
     hex_color = request.json
+    # hex_color='#646464'
     url_encoded_color = urllib.parse.quote(hex_color)
     print(url_encoded_color)
 
-    # color = '646464'
-    url = f'{BASE_URL}/object?apikey={FOGG_API_KEY}&color={url_encoded_color}'
+    # only retrieve objects with image urls
+    url = f'{BASE_URL}/object?apikey={FOGG_API_KEY}&color={url_encoded_color}&hasimage=1&q=imagepermissionlevel:0'
     print(url)
     res = requests.get(url)
     print(res.status_code)
-    return res.json()
+    res_json = res.json()
+    print(res_json)
+    return res_json
+    # return res.json()
