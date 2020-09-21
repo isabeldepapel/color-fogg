@@ -1,18 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ChromePicker } from 'react-color';
-import logo from './logo.svg';
+import { ArtFocus, ArtList } from './Art';
 import './App.css';
 
 const DEFAULT_COLOR = '#333';
 
 function ColorPicker() {
   const [pickedColor, setPickedColor] = useState(DEFAULT_COLOR);
-  console.log('PICKED COLOR', pickedColor);
+  const [artList, setArtList] = useState([]);
+  const [artFocus, setArtFocus] = useState({});
+ 
+  function handleClick(artList) {
+    const newArtFocus = artList.length > 0 ? artList[0] : {};
+    const newArtList = artList.length > 0 ? artList.slice(1) : artList;
+    setArtFocus(newArtFocus);
+    setArtList(newArtList);
+  }
 
   return (
-    <div>
-      <ChromeColorPicker pickedColor={(pickedColor) => { setPickedColor(pickedColor) }}/>
-      <GetArt pickedColor={pickedColor}/>
+    <div className="App">
+      <div className="color-container">
+        <ChromeColorPicker pickedColor={(pickedColor) => { setPickedColor(pickedColor) }}/>
+        <GetArt pickedColor={pickedColor} handleClick={handleClick} />
+      </div>
+      <ArtFocus objectInfo={artFocus}/>
+      <ArtList artList={artList}/>
     </div>
   )
 
@@ -42,17 +54,21 @@ class ChromeColorPicker extends React.Component {
 
 function GetArt(props) {
   const { pickedColor } = props;
-  console.log('color in button', pickedColor);
 
-  async function handleClick() {
-    const res = await fetch('/result', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(pickedColor)
-    });
-    console.log(res);
-  }
+    async function handleClick() {
+      console.log('handling click');
+      const res = await fetch('/result', {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(pickedColor)
+      });
+  
+      const artList = await res.json()
+      console.log('current art list', artList);
+      // setArtList(artList);
+      props.handleClick(artList);
+    }
 
   return (
     <button onClick={handleClick}>
@@ -61,14 +77,4 @@ function GetArt(props) {
   )
 }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <ColorPicker/>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+export default ColorPicker;
