@@ -1,3 +1,15 @@
 {
-    "python.pythonPath": "api/.venv/bin/python"
+    "python.pythonPath": "api/.venv/bin/python",
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.formatOnSave": false,
+        "editor.tabSize": 4
+    },
+    "[javascriptreact]": {
+        "editor.formatOnSave": false
+    },
+    "eslint.alwaysShowStatus": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    }
 }
