@@ -5,13 +5,16 @@
   grid-template-rows: auto;
   grid-template-areas:
     "color-picker main gallery"
+    ". main ."
+    ". main ."
     "footer footer footer";
-  justify-items: center;
-  align-items: center;
+  /* justify-items: center;
+  align-items: center; */
 }
 
 .color-container {
   grid-area: color-picker;
+  place-self: center;
 }
 
 .App-logo {

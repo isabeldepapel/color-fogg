@@ -1,0 +1,21 @@
+.Color-circle {
+    border-radius: 50%;
+    height: 2.5rem;
+    width: 2.5rem;
+    transform: scale(1);
+    transition: transform 100ms ease 0s;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.Color-circle:hover {
+    transform: scale(1.2);
+}
+
+.Color-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25px, .75fr));
+    grid-template-rows: auto;
+    grid-gap: .5rem;
+    margin-block-start: .5rem;
+}

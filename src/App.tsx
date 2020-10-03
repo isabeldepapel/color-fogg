@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
+import { HandleClickFn } from './Colors';
 import './App.css';
 
 const DEFAULT_COLOR = '#333';
 
-type Color = {
+export type Color = {
 	hex: string;
 };
 
 function ColorPicker() {
 	const [pickedColor, setPickedColor] = useState<string>(DEFAULT_COLOR);
 	const [artList, setArtList] = useState<ArtObject[]>([]);
-	const [artFocus, setArtFocus] = useState<ArtObject>();
+	const artFocus = artList[0];
 
-	function handleClick(artList: ArtObject[]) {
-		const newArtFocus = artList.length > 0 ? artList[0] : undefined;
-		const newArtList = artList.length > 0 ? artList.slice(1) : artList;
-		setArtFocus(newArtFocus);
+	function handleClick(newArtList: ArtObject[]) {
 		setArtList(newArtList);
 	}
 
@@ -27,8 +25,8 @@ function ColorPicker() {
 				<ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
 				<GetArt pickedColor={pickedColor} handleClick={handleClick} />
 			</div>
-			{ artFocus && <ArtFocus objectInfo={artFocus} />}
-			<ArtList artList={artList} />
+			{ artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
+			<ArtList artList={artList} handleClick={handleClick} />
 		</div>
 	)
 }
@@ -43,7 +41,7 @@ type ColorPickerState = {
 
 type GetArtProps = {
 	pickedColor: string;
-	handleClick: (artList: ArtObject[]) => void;
+	handleClick: HandleClickFn
 };
 
 class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
@@ -72,7 +70,6 @@ function GetArt(props: GetArtProps) {
 	const { pickedColor } = props;
 
 	async function handleClick() {
-		console.log('handling click');
 		const res = await fetch('/result', {
 			method: 'POST',
 			cache: 'no-cache',
@@ -82,7 +79,6 @@ function GetArt(props: GetArtProps) {
 
 		const artList = await res.json()
 		console.log('current art list', artList);
-		// setArtList(artList);
 		props.handleClick(artList);
 	}
 
