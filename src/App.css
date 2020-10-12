@@ -1,20 +1,98 @@
 .App {
+  height: 100vh;
   text-align: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
+  grid-template-rows: auto 1fr auto;
   grid-template-areas:
+    "header header header"
     "color-picker main gallery"
-    ". main ."
-    ". main ."
     "footer footer footer";
-  /* justify-items: center;
-  align-items: center; */
 }
 
 .color-container {
   grid-area: color-picker;
   place-self: center;
+}
+
+.header {
+  grid-area: header;
+  display: grid;
+  min-height: 15vh;
+  align-items: center;
+}
+
+.header-text > h4 {
+  padding-top: 1vh;
+  font-size: larger;
+}
+
+footer {
+  grid-area: footer;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+  "left center right";
+  min-height: 7vh;
+  align-items: center;
+  margin-top: 1vh;
+}
+
+.about {
+  grid-area: left;
+  display: grid;
+  grid-template-columns: minmax(30px, 40px) minmax(30px, 40px) 1fr;
+  grid-column-gap: .5vw;
+  align-items: center;
+  justify-content: space-between;
+  margin-inline-start: 2vw;
+}
+
+.copyright {
+  justify-self: left;
+}
+
+.courtesy {
+  grid-area: right;
+  justify-self: end;
+  margin-inline-end: 2vw;
+}
+
+header, footer {
+  background-color: #FF006E;
+  color: #fff;
+}
+
+button {
+  border-radius: 4px;
+  margin-top: 2rem;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: #fff;
+  border: 2px solid #FB5607;
+  color: #FB5607;
+  font-weight: 500;
+  cursor: pointer;
+  transition-duration: .2s;
+}
+
+button:hover, button:focus {
+  color: #8338EC;
+  border: 2px solid #8338EC;
+  background-color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2rem;
+
 }
 
 .App-logo {
@@ -29,7 +107,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #26427a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

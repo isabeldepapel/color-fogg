@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
 import { HandleClickFn } from './Colors';
 import './App.css';
 
-const DEFAULT_COLOR = '#333';
+const DEFAULT_COLOR = '#646464';
 
 export type Color = {
 	hex: string;
@@ -21,12 +23,32 @@ function ColorPicker() {
 
 	return (
 		<div className="App">
+			<header className="header">
+				<div className="header-text">
+					<h1>Color Explorer</h1>
+					<h4>Find art by color</h4>
+				</div>
+			</header>
 			<div className="color-container">
 				<ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
 				<GetArt pickedColor={pickedColor} handleClick={handleClick} />
 			</div>
 			{ artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
 			<ArtList artList={artList} handleClick={handleClick} />
+			<footer className="footer">
+				<div className="about">
+					<a href="https://www.github.com/isabeldepapel/color-fogg" target="_blank" rel="noreferrer noopener">
+						<FontAwesomeIcon icon={faGithub} size="2x" />
+					</a>
+					<a href="https://wwwlinkedin.com/in/isabesuchanek">
+						<FontAwesomeIcon icon={faLinkedinIn} size="2x" />
+					</a>
+					<span className="copyright">&#169; 2020</span>
+				</div>
+				<div className="courtesy">All content courtesy of
+					<a href="https://www.harvardartmuseums.org/" target="_blank" rel="noreferrer noopener"> Harvard Art Museums</a>
+				</div>
+			</footer>
 		</div>
 	)
 }
@@ -83,8 +105,8 @@ function GetArt(props: GetArtProps) {
 	}
 
 	return (
-		<button onClick={handleClick}>
-			Get me an artwork
+		<button className="color-button" onClick={handleClick}>
+			Search
 		</button>
 	)
 }

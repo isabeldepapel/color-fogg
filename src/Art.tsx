@@ -109,12 +109,14 @@ function ArtFocus(props: ArtFocusProps) {
     return (
         <div className="Art">
             <figure>
-                <img className="Art-image Art-focus" src={url} alt={title}></img>
-                <figcaption className="Art-caption">
-                    {`${titleInfo}${yearInfo}`}<br />
-                    {artists && <Artists artists={artists} />}
-                    {medium}<br />
-                </figcaption>
+                <a href={url} target="blank" rel="noreferrer noopener">
+                    <img className="Art-image Art-focus" src={url} alt={title}></img>
+                    <figcaption className="Art-caption">
+                        {`${titleInfo}${yearInfo}`}<br />
+                        {artists && <Artists artists={artists} />}
+                        {medium}<br />
+                    </figcaption>
+                </a>
             </figure>
             {colorCircles}
         </div>

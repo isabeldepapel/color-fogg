@@ -27,4 +27,5 @@ def get_artwork_by_color():
    
     # records = res.records
     # print(res.status_code)
+    print(len(body['records']))
     return json.dumps(body['records'])
