@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
+import { SuggestedColors } from './Colors';
 import { HandleClickFn } from './Colors';
 import './App.css';
 
@@ -15,10 +16,12 @@ export type Color = {
 function ColorPicker() {
 	const [pickedColor, setPickedColor] = useState<string>(DEFAULT_COLOR);
 	const [artList, setArtList] = useState<ArtObject[]>([]);
+	const [numResults, setNumResults] = useState<number | undefined>();
 	const artFocus = artList[0];
 
 	function handleClick(newArtList: ArtObject[]) {
 		setArtList(newArtList);
+		setNumResults(newArtList.length);
 	}
 
 	return (
@@ -33,14 +36,15 @@ function ColorPicker() {
 				<ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
 				<GetArt pickedColor={pickedColor} handleClick={handleClick} />
 			</div>
-			{ artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
-			<ArtList artList={artList} handleClick={handleClick} />
+			{!artFocus && <SuggestedColors handleClick={handleClick} numResults={numResults} />}
+			{artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
+			{artList.length > 0 && <ArtList artList={artList} handleClick={handleClick} />}
 			<footer className="footer">
 				<div className="about">
-					<a href="https://www.github.com/isabeldepapel/color-fogg" target="_blank" rel="noreferrer noopener">
+					<a href="https://www.github.com/isabeldepapel/color-fogg" target="_blank" rel="noreferrer noopener" tabIndex={0}>
 						<FontAwesomeIcon icon={faGithub} size="2x" />
 					</a>
-					<a href="https://wwwlinkedin.com/in/isabesuchanek">
+					<a href="https://wwwlinkedin.com/in/isabesuchanek" target="_blank" rel="noreferrer noopener" tabIndex={0}>
 						<FontAwesomeIcon icon={faLinkedinIn} size="2x" />
 					</a>
 					<span className="copyright">&#169; 2020</span>

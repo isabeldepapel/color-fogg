@@ -15,12 +15,15 @@ type ArtistsProps = {
 
 export type ArtObject = {
     objectid: number;
+    /** Url of the image to display */
     primaryimageurl: string;
     title?: string;
     people?: Artist[];
     dated?: number;
     technique?: string;
     colors: ArtColor[];
+    /** Url of the object itself (not just image) */
+    url: string;
 };
 
 type ArtFocusProps = {
@@ -73,7 +76,7 @@ function ArtList(props: ArtListProps) {
 function ArtObject(props: ArtObjectProps) {
     const { artList, index } = props;
     const objectInfo = artList[index];
-    const { primaryimageurl: url, title } = objectInfo;
+    const { primaryimageurl: imageUrl, title } = objectInfo;
 
     function handleClick(event: MouseEvent) {
         event.preventDefault();
@@ -87,7 +90,7 @@ function ArtObject(props: ArtObjectProps) {
 
     return (
         <figure className="Art">
-            <img className="Art-image" src={url} alt={title} tabIndex={0} title={title} onClick={handleClick}></img>
+            <img className="Art-image" src={imageUrl} alt={title} tabIndex={0} title={title} onClick={handleClick}></img>
         </figure>
     );
 }
@@ -95,7 +98,7 @@ function ArtObject(props: ArtObjectProps) {
 function ArtFocus(props: ArtFocusProps) {
     const { artList } = props;
     const objectInfo = artList[0];
-    const { people: artists, title, dated: year, primaryimageurl: url, technique: medium, colors } = objectInfo;
+    const { people: artists, title, dated: year, primaryimageurl: imageUrl, url: objectUrl, technique: medium, colors } = objectInfo;
 
     console.log('ART FOCUS', JSON.stringify(objectInfo));
     const titleInfo = title ? title : 'Untitled';
@@ -107,10 +110,10 @@ function ArtFocus(props: ArtFocusProps) {
     }
 
     return (
-        <div className="Art">
+        <div className="Art-focus">
             <figure>
-                <a href={url} target="blank" rel="noreferrer noopener">
-                    <img className="Art-image Art-focus" src={url} alt={title}></img>
+                <a href={objectUrl} target="blank" rel="noreferrer noopener" tabIndex={0}>
+                    <img className="Art-image" src={imageUrl} alt={title}></img>
                     <figcaption className="Art-caption">
                         {`${titleInfo}${yearInfo}`}<br />
                         {artists && <Artists artists={artists} />}

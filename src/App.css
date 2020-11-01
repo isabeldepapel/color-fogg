@@ -2,23 +2,37 @@
   height: 100vh;
   text-align: center;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "header header header"
-    "color-picker main gallery"
-    "footer footer footer";
+    "header"
+    "color-picker"
+    "main"
+    "gallery"
+    "footer";
+}
+
+@media (min-width: 992px) {
+  .App {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "header header header"
+      "color-picker main gallery"
+      "footer footer footer";
+  }
 }
 
 .color-container {
   grid-area: color-picker;
   place-self: center;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
 }
 
 .header {
   grid-area: header;
   display: grid;
-  min-height: 15vh;
+  min-height: 15vmin;
   align-items: center;
 }
 
@@ -32,14 +46,14 @@ footer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas:
-  "left center right";
+  "about center courtesy";
   min-height: 7vh;
   align-items: center;
   margin-top: 1vh;
 }
 
 .about {
-  grid-area: left;
+  grid-area: about;
   display: grid;
   grid-template-columns: minmax(30px, 40px) minmax(30px, 40px) 1fr;
   grid-column-gap: .5vw;
@@ -53,7 +67,7 @@ footer {
 }
 
 .courtesy {
-  grid-area: right;
+  grid-area: courtesy;
   justify-self: end;
   margin-inline-end: 2vw;
 }

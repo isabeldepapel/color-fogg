@@ -32,9 +32,9 @@ export type ArtColor = {
 };
 
 type ColorCircleProps = {
-    color: string,
-    css3: string,
-    handleClick: HandleClickFn
+    color: string;
+    css3: string;
+    handleClick: HandleClickFn;
 };
 
 function ColorCircle(props: ColorCircleProps) {
@@ -53,8 +53,8 @@ function ColorCircle(props: ColorCircleProps) {
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(color)
         });
-        const artList = await res.json()
-        props.handleClick(artList)
+        const artList = await res.json();
+        props.handleClick(artList);
     }
 
     const colorCircleStyle = {
@@ -74,8 +74,8 @@ function ColorCircle(props: ColorCircleProps) {
 }
 
 type ColorListProps = {
-    colors: ArtColor[],
-    handleClick: HandleClickFn
+    colors: ArtColor[];
+    handleClick: HandleClickFn;
 };
 
 function ColorList(props: ColorListProps) {
@@ -91,6 +91,42 @@ function ColorList(props: ColorListProps) {
     )
 }
 
+type SuggestedColorsProps = {
+    numResults: number | undefined;
+    handleClick: HandleClickFn;
+};
+
+function SuggestedColors(props: SuggestedColorsProps) {
+    const suggestedColors: string[] = [
+        '#af0019', // red
+        '#c86432', // orange
+        '#c8af32', // yellow
+        '#00644b', // green
+        '#19327d', // blue
+        '#641964', // purple
+        '#96644b', // brown
+        '#646464', // grey
+        '#000000', // black
+    ]
+
+    const noResultsMessage = '0 results. Choose again?'
+
+    return (
+        <div className="Color-suggestion">
+            <div className="message">
+                {props.numResults === 0 && <p>{noResultsMessage}</p>}
+                <p>Some suggestions</p>
+            </div>
+            <figure className="Color-list">
+                {suggestedColors.map((color) => {
+                    return <ColorCircle key={color} color={color} css3={color} handleClick={props.handleClick} />
+                })}
+            </figure>
+        </div>
+    )
+}
+
 export {
-    ColorList
+    ColorList,
+    SuggestedColors
 };

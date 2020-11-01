@@ -10,17 +10,25 @@
   margin-block-start: 1rem;
 }
 
+.Art-focus {
+  place-self: center;
+}
+
 .Artlist {
   text-align: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 10vw);
+  grid-template-rows: repeat(3, 33vw);
   grid-gap: .5rem;
-  margin-block-start: 1rem;
-  margin-block-end: auto;
   margin-inline-start: 1rem;
   margin-inline-end: 1rem;
   place-self: center;
+}
+
+@media (min-width: 992px) {
+  .Artlist {
+    grid-template-rows: repeat(3, 10vw);
+  }
 }
 
 .Art-image {
@@ -32,12 +40,10 @@
 }
 
 .Art-image:hover {
-  opacity: 1.0;
   transform: scale(1.5);
 }
 
-.Art-focus:hover {
-  opacity: 1.0;
+.Art-focus .Art-image:hover {
   transform: scale(1);
 }
 

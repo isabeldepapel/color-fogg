@@ -14,8 +14,49 @@
 
 .Color-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25px, .75fr));
+    grid-template-columns: repeat(auto-fit, minmax(40px, .75fr));
     grid-template-rows: auto;
     grid-gap: .5rem;
     margin-block-start: .5rem;
+}
+
+.Color-suggestion {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* third row with no content, > 2x height of first row, to approx vertically align color grid with color picker */
+    grid-template-rows: minmax(5vh, 10vh) 1fr 15vh; 
+    grid-template-areas: 
+    "text text text"
+    "color color color"
+    "placeholder placeholder placeholder";
+    place-self: center;
+}
+
+ .Color-suggestion div {
+    display: grid;
+    grid-area: text;
+    color: #FB5607;
+    font-weight: 500;
+}
+
+.Color-suggestion p:nth-child(1) {
+    align-self: center;
+}
+
+.Color-suggestion p:nth-child(2) {
+    margin-block-start: 1vh;
+    margin-block-end: 1vh;
+}
+
+.Color-suggestion .Color-list {
+    grid-template-columns: repeat(3, 1fr);
+    grid-area: color;
+    grid-gap: 1rem;
+    align-self: center;
+}
+
+/* Overwrite default color-circle size */
+.Color-suggestion .Color-circle {
+    height: 5rem;
+    width: 5rem;
 }
