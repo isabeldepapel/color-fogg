@@ -1,5 +1,4 @@
 {
-    "python.pythonPath": "api/.venv/bin/python",
     "editor.formatOnSave": true,
     "[javascript]": {
         "editor.formatOnSave": false,

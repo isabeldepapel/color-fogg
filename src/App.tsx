@@ -103,9 +103,14 @@ function GetArt(props: GetArtProps) {
 			body: JSON.stringify(pickedColor)
 		});
 
-		const artList = await res.json()
-		console.log('current art list', artList);
-		props.handleClick(artList);
+		try {
+			const artList = await res.json()
+			console.log('current art list', artList);
+			props.handleClick(artList);
+		} catch (err) {
+			// TODO: actual error handling
+			console.log(err);
+		}
 	}
 
 	return (

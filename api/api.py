@@ -7,7 +7,11 @@ import urllib.parse
 FOGG_API_KEY = os.getenv('FOGG_API_KEY')
 BASE_URL = 'https://api.harvardartmuseums.org'
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 @app.route('/result', methods = ['POST'])
 def get_artwork_by_color():
@@ -22,10 +26,6 @@ def get_artwork_by_color():
     res = requests.get(url)
     print(res.status_code)
     body = res.json()
-    # print(body)
-    # print(body['records'])
-   
-    # records = res.records
-    # print(res.status_code)
+    
     print(len(body['records']))
     return json.dumps(body['records'])
