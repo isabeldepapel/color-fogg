@@ -12,6 +12,8 @@
 
 .Art-focus {
   place-self: center;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .Artlist {
@@ -20,8 +22,8 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 33vw);
   grid-gap: .5rem;
-  margin-inline-start: 1rem;
-  margin-inline-end: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   place-self: center;
 }
 

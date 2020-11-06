@@ -44,9 +44,9 @@
 footer {
   grid-area: footer;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-areas:
-  "about center courtesy";
+  "about courtesy";
   min-height: 7vh;
   align-items: center;
   margin-top: 1vh;
