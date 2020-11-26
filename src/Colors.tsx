@@ -1,6 +1,8 @@
 import React, { MouseEvent } from 'react';
-import './Colors.css';
+import './style/Colors.css';
 import { ArtObject } from './Art';
+
+const APP_URL = process.env.REACT_APP_URL;
 
 export type HandleClickFn = (artList: ArtObject[]) => void;
 
@@ -37,6 +39,18 @@ type ColorCircleProps = {
     handleClick: HandleClickFn;
 };
 
+function createRequest(color: string): Request {
+    const url = new URL('/images', APP_URL);
+    url.search = new URLSearchParams({ color }).toString();
+
+    const request = new Request(url.toString(), {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: { 'content-type': 'application/json' }
+    });
+    return request;
+}
+
 function ColorCircle(props: ColorCircleProps) {
     const { color } = props;
 
@@ -47,12 +61,7 @@ function ColorCircle(props: ColorCircleProps) {
     async function handleClick(event: MouseEvent) {
         event.preventDefault();
 
-        const res = await fetch('/result', {
-            method: 'POST',
-            cache: 'no-cache',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(color)
-        });
+        const res = await fetch(createRequest(color));
         const artList = await res.json();
         props.handleClick(artList);
     }
@@ -128,5 +137,6 @@ function SuggestedColors(props: SuggestedColorsProps) {
 
 export {
     ColorList,
-    SuggestedColors
+    SuggestedColors,
+    createRequest
 };

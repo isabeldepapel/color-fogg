@@ -1,6 +1,9 @@
 # Color Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a basic web app that uses the [Harvard Art Museums API](https://github.com/harvardartmuseums/api-docs) to get art images by color. Pick a color and it will retrieve (up to) 10 images, randomly sorted, that contain that color.
+
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and has a Flask backend.
 
 ## Available Scripts
 

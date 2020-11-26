@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
-import { SuggestedColors } from './Colors';
+import { SuggestedColors, createRequest } from './Colors';
 import { HandleClickFn } from './Colors';
-import './App.css';
+import './style/App.css';
 
 const DEFAULT_COLOR = '#646464';
 
@@ -13,7 +13,7 @@ export type Color = {
 	hex: string;
 };
 
-function ColorPicker() {
+function ColorExplorer() {
 	const [pickedColor, setPickedColor] = useState<string>(DEFAULT_COLOR);
 	const [artList, setArtList] = useState<ArtObject[]>([]);
 	const [numResults, setNumResults] = useState<number | undefined>();
@@ -44,7 +44,7 @@ function ColorPicker() {
 					<a href="https://www.github.com/isabeldepapel/color-fogg" target="_blank" rel="noreferrer noopener" tabIndex={0}>
 						<FontAwesomeIcon icon={faGithub} size="2x" />
 					</a>
-					<a href="https://wwwlinkedin.com/in/isabesuchanek" target="_blank" rel="noreferrer noopener" tabIndex={0}>
+					<a href="https://www.linkedin.com/in/isabelsuchanek" target="_blank" rel="noreferrer noopener" tabIndex={0}>
 						<FontAwesomeIcon icon={faLinkedinIn} size="2x" />
 					</a>
 					<span className="copyright">&#169; 2020</span>
@@ -96,12 +96,7 @@ function GetArt(props: GetArtProps) {
 	const { pickedColor } = props;
 
 	async function handleClick() {
-		const res = await fetch('/result', {
-			method: 'POST',
-			cache: 'no-cache',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify(pickedColor)
-		});
+		const res = await fetch(createRequest(pickedColor));
 
 		try {
 			const artList = await res.json()
@@ -120,4 +115,4 @@ function GetArt(props: GetArtProps) {
 	)
 }
 
-export default ColorPicker;
+export default ColorExplorer;

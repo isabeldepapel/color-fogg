@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { ArtColor, ColorList, HandleClickFn } from './Colors';
-import './Art.css';
+import './style/Art.css';
 
 export type Artist = {
     personid: number;

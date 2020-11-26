@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import ColorPicker from './App';
+import './style/index.css';
+import ColorExplorer from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ColorPicker />
+    <ColorExplorer />
   </React.StrictMode>,
   document.getElementById('root')
 );

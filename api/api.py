@@ -18,14 +18,15 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/result', methods=['POST'])
+@app.route('/images', methods=['GET'])
 def get_artwork_by_color():
-    hex_color = request.json
+    hex_color = request.args.get('color')
+    print(hex_color)
 
     url_encoded_color = urllib.parse.quote(hex_color)
     print(url_encoded_color)
 
-    # only retrieve objects with image urls
+    # only retrieve objects with image urls, get first 10 at random
     url = f'{BASE_URL}/object?apikey={FOGG_API_KEY}&color={url_encoded_color}&sort=random&hasimage=1&q=imagepermissionlevel:0'
     print(url)
 
