@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
 import { SuggestedColors, createRequest } from './Colors';
-import { Header, Footer } from './HeaderAndFooter';
 import { HandleClickFn } from './Colors';
 import './style/App.css';
-import ColorSearch from './ColorSearch';
 
 const DEFAULT_COLOR = '#646464';
-
-export type Color = {
-	hex: string;
-};
 
 function ColorExplorer() {
 	const [pickedColor, setPickedColor] = useState<string>(DEFAULT_COLOR);
@@ -29,19 +22,12 @@ function ColorExplorer() {
 
 	return (
 		<div className="App">
-			<BrowserRouter>
-				<Switch>
-					<Route exact path="/">
-						<Header />
-						<ColorSearch pickedColor={pickedColor} setPickedColor={setPickedColor} handleClick={handleClick}/>
-						<Footer />
-					</Route>
-					<Route>
-
-					</Route>
-				</Switch>
-			</BrowserRouter>
-
+			<header className="header">
+				<div className="header-text">
+					<h1>Color Explorer</h1>
+					<h4>Find art by color</h4>
+				</div>
+			</header>
 			<div className="color-container">
 				<ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
 				<GetArt pickedColor={pickedColor} handleClick={handleClick} />
@@ -49,9 +35,27 @@ function ColorExplorer() {
 			{!artFocus && <SuggestedColors handleClick={handleClick} numResults={numResults} />}
 			{artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
 			{artList.length > 0 && <ArtList artList={artList} handleClick={handleClick} />}
+			<footer className="footer">
+				<div className="about">
+					<a href="https://www.github.com/isabeldepapel/color-fogg" target="_blank" rel="noreferrer noopener" tabIndex={0}>
+						<FontAwesomeIcon icon={faGithub} size="2x" />
+					</a>
+					<a href="https://www.linkedin.com/in/isabelsuchanek" target="_blank" rel="noreferrer noopener" tabIndex={0}>
+						<FontAwesomeIcon icon={faLinkedinIn} size="2x" />
+					</a>
+					<span className="copyright">&#169; 2020</span>
+				</div>
+				<div className="courtesy">All content courtesy of
+					<a href="https://www.harvardartmuseums.org/" target="_blank" rel="noreferrer noopener"> Harvard Art Museums</a>
+				</div>
+			</footer>
 		</div>
 	)
 }
+
+export type Color = {
+	hex: string;
+};
 
 type ColorPickerProps = {
 	pickedColor: (background: string) => void;
@@ -59,11 +63,6 @@ type ColorPickerProps = {
 
 type ColorPickerState = {
 	background: string
-};
-
-type GetArtProps = {
-	pickedColor: string;
-	handleClick: HandleClickFn
 };
 
 class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
@@ -88,46 +87,28 @@ class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerSta
 	}
 }
 
-function GetArt(props: GetArtProps) {
-	const { pickedColor } = props;
 
-	async function handleClick() {
-		const res = await fetch(createRequest(pickedColor));
+export {
+	ColorExplorer
+};
 
-		try {
-			const artList = await res.json()
-			console.log('current art list', artList);
-			props.handleClick(artList);
-		} catch (err) {
-			// TODO: actual error handling
-			console.log(err);
-		}
-	}
+// function App() {
+// 	const queryParams = new URLSearchParams(useLocation().search);
+// 	const color = queryParams.get('color');
+// 	const path = `/images?color=${color}`;
 
-	return (
-		<button className="color-button" onClick={handleClick}>
-			Search
-		</button>
-	)
-}
+// 	return (
+// 	// <BrowserRouter>
+// 		<Switch>
+// 			<Route exact path="/">
+// 				<ColorExplorer />
+// 			</Route>
+// 			<Route path={path}>
+// 				<ColorExplorer />
+// 			</Route>
+// 		</Switch>
+// 	// </BrowserRouter>
+// 	)
+// }
 
-function App() {
-	const queryParams = new URLSearchParams(useLocation().search);
-	const color = queryParams.get('color');
-	const path = `/images?color=${color}`;
-
-	return (
-	// <BrowserRouter>
-		<Switch>
-			<Route exact path="/">
-				<ColorExplorer />
-			</Route>
-			<Route path={path}>
-				<ColorExplorer />
-			</Route>
-		</Switch>
-	// </BrowserRouter>
-	)
-}
-
-export default App;
+// export default App;
