@@ -20,11 +20,13 @@ def index():
 
 @app.route('/images', methods=['GET'])
 def get_artwork_by_color():
-    hex_color = request.args.get('color')
-    print(hex_color)
+    print('getting images')
+    url_encoded_color = request.args.get('color')
+    hex_color = urllib.parse.unquote(url_encoded_color)
+    # print(hex_color)
 
-    url_encoded_color = urllib.parse.quote(hex_color)
-    print(url_encoded_color)
+    # url_encoded_color = urllib.parse.quote(hex_color)
+    print('url color', url_encoded_color)
 
     # only retrieve objects with image urls, get first 10 at random
     url = f'{BASE_URL}/object?apikey={FOGG_API_KEY}&color={url_encoded_color}&sort=random&hasimage=1&q=imagepermissionlevel:0'
@@ -40,3 +42,9 @@ def get_artwork_by_color():
         num_results = (len(body['records']))
         beeline.add_context({'num_results': num_results})
         return json.dumps(body['records'])
+
+
+@app.errorhandler(404)
+def not_found(e):
+    print('not found')
+    return app.send_static_file('index.html')

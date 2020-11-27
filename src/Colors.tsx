@@ -1,6 +1,7 @@
 import React, { MouseEvent } from 'react';
-import './style/Colors.css';
+import { useHistory } from 'react-router-dom';
 import { ArtObject } from './Art';
+import './style/Colors.css';
 
 const APP_URL = process.env.REACT_APP_URL;
 
@@ -42,6 +43,7 @@ type ColorCircleProps = {
 function createRequest(color: string): Request {
     const url = new URL('/images', APP_URL);
     url.search = new URLSearchParams({ color }).toString();
+    console.log('req url', url.toString());
 
     const request = new Request(url.toString(), {
         method: 'GET',
@@ -52,18 +54,25 @@ function createRequest(color: string): Request {
 }
 
 function ColorCircle(props: ColorCircleProps) {
+    const history = useHistory();
     const { color } = props;
+    const urlEncodedColor = encodeURIComponent(color);
 
     function handleMouseOver(event: MouseEvent) {
         event.preventDefault();
     }
 
     async function handleClick(event: MouseEvent) {
+        console.log('color circle color', color);
+
         event.preventDefault();
 
-        const res = await fetch(createRequest(color));
+        const res = await fetch(createRequest(urlEncodedColor));
         const artList = await res.json();
         props.handleClick(artList);
+        console.log('color circle art list', artList);
+        history.push(`/images?color=${urlEncodedColor}`)
+        sessionStorage.setItem(color, JSON.stringify(artList));
     }
 
     const colorCircleStyle = {
