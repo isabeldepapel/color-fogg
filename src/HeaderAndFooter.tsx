@@ -1,12 +1,15 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
         <header className="header">
             <div className="header-text">
-                <h1>Color Explorer</h1>
+                <h1>
+                    <Link to="/">ColorExplorer</Link>
+                </h1>
                 <h4>Find art by color</h4>
             </div>
         </header>

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
 import { SuggestedColors, createRequest } from './Colors';
@@ -9,6 +7,7 @@ import { Header, Footer } from './HeaderAndFooter';
 import { HandleClickFn } from './Colors';
 import './style/App.css';
 import ColorSearch from './ColorSearch';
+import { encode } from 'punycode';
 
 const DEFAULT_COLOR = '#646464';
 
@@ -27,28 +26,32 @@ function ColorExplorer() {
 		setNumResults(newArtList.length);
 	}
 
-	return (
+	console.log('app art list', artList);
+
+	const queryParams = new URLSearchParams(useLocation().search);
+	const color = queryParams.get('color') || '';
+	console.log('app color', color);
+
+	return ( 
+		// BrowserRouter needs to be in index.tsx because you can't use the hooks from within the same component
+		// that puts the router into the tree
 		<div className="App">
-			<BrowserRouter>
-				<Switch>
-					<Route exact path="/">
-						<Header />
-						<ColorSearch pickedColor={pickedColor} setPickedColor={setPickedColor} handleClick={handleClick}/>
-						<Footer />
-					</Route>
-					<Route>
-
-					</Route>
-				</Switch>
-			</BrowserRouter>
-
-			<div className="color-container">
-				<ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
-				<GetArt pickedColor={pickedColor} handleClick={handleClick} />
-			</div>
-			{!artFocus && <SuggestedColors handleClick={handleClick} numResults={numResults} />}
-			{artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
-			{artList.length > 0 && <ArtList artList={artList} handleClick={handleClick} />}
+			<Switch>
+				<Route exact path="/">
+					<Header />
+					<ColorSearch pickedColor={pickedColor} setPickedColor={setPickedColor} handleClick={handleClick}/>
+					<SuggestedColors handleClick={handleClick} numResults={numResults} />
+					<Footer />
+				</Route>
+				<Route path="/images">
+					<Header />
+					<ColorSearch pickedColor={pickedColor} setPickedColor={setPickedColor} handleClick={handleClick}/>
+					{!artFocus && <SuggestedColors handleClick={handleClick} numResults={numResults} />}
+					{artFocus && <ArtFocus objectInfo={artFocus} artList={artList} handleClick={handleClick} />}
+					{artList.length > 0 && <ArtList artList={artList} handleClick={handleClick} />}
+					<Footer />
+				</Route>
+			</Switch>
 		</div>
 	)
 }
@@ -88,46 +91,4 @@ class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerSta
 	}
 }
 
-function GetArt(props: GetArtProps) {
-	const { pickedColor } = props;
-
-	async function handleClick() {
-		const res = await fetch(createRequest(pickedColor));
-
-		try {
-			const artList = await res.json()
-			console.log('current art list', artList);
-			props.handleClick(artList);
-		} catch (err) {
-			// TODO: actual error handling
-			console.log(err);
-		}
-	}
-
-	return (
-		<button className="color-button" onClick={handleClick}>
-			Search
-		</button>
-	)
-}
-
-function App() {
-	const queryParams = new URLSearchParams(useLocation().search);
-	const color = queryParams.get('color');
-	const path = `/images?color=${color}`;
-
-	return (
-	// <BrowserRouter>
-		<Switch>
-			<Route exact path="/">
-				<ColorExplorer />
-			</Route>
-			<Route path={path}>
-				<ColorExplorer />
-			</Route>
-		</Switch>
-	// </BrowserRouter>
-	)
-}
-
-export default App;
+export default ColorExplorer;

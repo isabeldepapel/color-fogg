@@ -1,7 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import ColorSearch from './ColorSearch';
 
 function Header() {
     return (
@@ -35,11 +34,11 @@ function Footer() {
 
 
 function Home() {
-    return (
-        <Header />
-        <ColorSearch />
-        <Footer />
-    )
+    // return (
+    //     <Header />
+    //     <ColorSearch />
+    //     <Footer />
+    // )
 }
 
 

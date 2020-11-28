@@ -1,4 +1,5 @@
 import React, { MouseEvent } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import './style/Colors.css';
 import { ArtObject } from './Art';
 
@@ -39,9 +40,18 @@ type ColorCircleProps = {
     handleClick: HandleClickFn;
 };
 
+type ColorCircleLinkProps = {
+    location: {
+        state: {
+            colorCircleProps: ColorCircleProps
+        }
+    }
+}
+
 function createRequest(color: string): Request {
     const url = new URL('/images', APP_URL);
     url.search = new URLSearchParams({ color }).toString();
+    console.log('req url', url.toString());
 
     const request = new Request(url.toString(), {
         method: 'GET',
@@ -51,19 +61,28 @@ function createRequest(color: string): Request {
     return request;
 }
 
-function ColorCircle(props: ColorCircleProps) {
+// function ColorCircle(props: ColorCircleProps) {
+function ColorCircle(props: any) {
+    const history = useHistory();
+    // const { colorCircleProps } = props.location.state;
+    // const { color } = colorCircleProps;
     const { color } = props;
+    const urlEncodedColor = encodeURIComponent(color);
 
     function handleMouseOver(event: MouseEvent) {
         event.preventDefault();
     }
 
     async function handleClick(event: MouseEvent) {
+        console.log('color circle color', color);
+
         event.preventDefault();
 
-        const res = await fetch(createRequest(color));
+        const res = await fetch(createRequest(urlEncodedColor));
         const artList = await res.json();
         props.handleClick(artList);
+        console.log('color circle art list', artList);
+        history.push(`/images?color=${urlEncodedColor}`)
     }
 
     const colorCircleStyle = {

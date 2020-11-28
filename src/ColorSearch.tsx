@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChromePicker } from 'react-color';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { createRequest, HandleClickFn } from './Colors';
 
 const DEFAULT_COLOR = '#646464';
@@ -22,10 +22,20 @@ type GetArtProps = {
 	handleClick: HandleClickFn
 };
 
+type GetArtLinkProps = {
+    location: {
+        state: GetArtProps
+    }
+}
+
 type ColorSearchProps = {
     pickedColor: string;
     setPickedColor: React.Dispatch<React.SetStateAction<string>>;
     handleClick: HandleClickFn;
+}
+
+type GetArtLocationState = {
+    getArtProps: GetArtProps
 }
 
 class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
@@ -51,16 +61,25 @@ class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerSta
 }
 
 function GetArt(props: any) { // TODO: fix typing
-    const { getArtProps } = props.location.state;
-    const { pickedColor } = getArtProps;
+    console.log('location', useLocation());
+    const history = useHistory();
+    // const location = useLocation<GetArtLocationState>();
+    // console.log('location', location);
+    // const { getArtProps } = location.state;
+    // // const { getArtProps } = props.location.state;
+    const { pickedColor } = props;
+    const urlEncodedColor = encodeURIComponent(pickedColor);
+    // console.log('encoded color', urlEncodedColor);
 
 	async function handleClick() {
-		const res = await fetch(createRequest(pickedColor));
+        console.log('handling click');
+		const res = await fetch(createRequest(urlEncodedColor));
 
 		try {
 			const artList = await res.json()
 			console.log('current art list', artList);
-			getArtProps.handleClick(artList);
+            props.handleClick(artList);
+            history.push(`/images?color=${urlEncodedColor}`);
 		} catch (err) {
 			// TODO: actual error handling
 			console.log(err);
@@ -78,7 +97,9 @@ function GetArt(props: any) { // TODO: fix typing
 
 function ColorSearch(props: ColorSearchProps) {
     const { pickedColor, setPickedColor, handleClick } = props;
+    console.log('color search props', props);
     const getArtProps: GetArtProps = { pickedColor, handleClick };
+    console.log('get art props', getArtProps);
     // const queryParams = new URLSearchParams(useLocation().search);
 	// const color = queryParams.get('color');
 	// const path = `/images?color=${color}`;
@@ -86,15 +107,7 @@ function ColorSearch(props: ColorSearchProps) {
     return (
         <div className="color-container">
             <ChromeColorPicker pickedColor={(pickedColor: string) => { setPickedColor(pickedColor) }} />
-            <Link 
-                to={{
-                    pathname: '/images',
-                    search: `?color=${pickedColor}`,
-                    state: { getArtProps }
-                }}
-                component={GetArt}
-            />
-            {/* <GetArt pickedColor={pickedColor} handleClick={handleClick} /> */}
+            <GetArt pickedColor={pickedColor} handleClick={handleClick} />
         </div>
 
     )
