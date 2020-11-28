@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { ChromePicker } from 'react-color';
 import { ArtFocus, ArtList, ArtObject } from './Art';
-import { SuggestedColors, createRequest } from './Colors';
+import { SuggestedColors } from './Colors';
 import { Header, Footer } from './HeaderAndFooter';
-import { HandleClickFn } from './Colors';
 import './style/App.css';
 import ColorSearch from './ColorSearch';
-import { encode } from 'punycode';
 
 const DEFAULT_COLOR = '#646464';
-
-export type Color = {
-	hex: string;
-};
 
 function ColorExplorer() {
 	const [pickedColor, setPickedColor] = useState<string>(DEFAULT_COLOR);
@@ -54,41 +47,6 @@ function ColorExplorer() {
 			</Switch>
 		</div>
 	)
-}
-
-type ColorPickerProps = {
-	pickedColor: (background: string) => void;
-};
-
-type ColorPickerState = {
-	background: string
-};
-
-type GetArtProps = {
-	pickedColor: string;
-	handleClick: HandleClickFn
-};
-
-class ChromeColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
-	state: ColorPickerState = {
-		background: DEFAULT_COLOR
-	};
-
-	handleChangeComplete = (color: Color) => {
-		this.setState({ background: color.hex });
-		this.props.pickedColor(this.state.background);
-	};
-
-	render() {
-		console.log('picked', this.state.background);
-
-		return (
-			<ChromePicker
-				color={this.state.background}
-				onChangeComplete={this.handleChangeComplete}
-			/>
-		);
-	}
 }
 
 export default ColorExplorer;

@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './style/Colors.css';
 import { ArtObject } from './Art';
 
@@ -61,11 +61,8 @@ function createRequest(color: string): Request {
     return request;
 }
 
-// function ColorCircle(props: ColorCircleProps) {
-function ColorCircle(props: any) {
+function ColorCircle(props: ColorCircleProps) {
     const history = useHistory();
-    // const { colorCircleProps } = props.location.state;
-    // const { color } = colorCircleProps;
     const { color } = props;
     const urlEncodedColor = encodeURIComponent(color);
 
