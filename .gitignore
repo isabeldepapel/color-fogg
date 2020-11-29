@@ -28,6 +28,7 @@ yarn-error.log*
 .python-version
 *.pyc
 __pycache__/
+.eslintcache
 
 instance/
 sample_data/

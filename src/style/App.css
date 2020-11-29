@@ -77,7 +77,7 @@ header, footer {
   color: #fff;
 }
 
-button {
+button.color-button {
   border-radius: 4px;
   margin-top: 2rem;
   padding-top: .75rem;
@@ -92,7 +92,7 @@ button {
   transition-duration: .2s;
 }
 
-button:hover, button:focus {
+button.color-button:hover, button.color-button:focus {
   color: #8338EC;
   border: 2px solid #8338EC;
   background-color: #fff;

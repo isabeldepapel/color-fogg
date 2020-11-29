@@ -1,94 +1,58 @@
 import React, { MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ArtObject } from './Art';
+import { ArtColor, ArtObject, HandleClickFn } from './helpers';
 import './style/Colors.css';
 
 const APP_URL = process.env.REACT_APP_URL;
 
-export type HandleClickFn = (artList: ArtObject[]) => void;
-
-enum Hues {
-    'Red',
-    'Orange',
-    'Yellow',
-    'Green',
-    'Blue',
-    'Violet',
-    'Brown',
-    'Grey',
-    'Black',
-    'White'
-};
-
-export type ArtColor = {
-    /** CSS hex color code */
-    color: string;
-    /** Closest match to the Fogg's design color spectrum (hex code)  */
-    spectrum: string;
-    /** Color hex code mapped to the name of a hue. One of:
-     * Red, Orange, Yellow, Green, Blue, Violet, Brown, Grey, Black, White */
-    hue: keyof typeof Hues;
-    /** Amount of the color found in the image. Decimal value between 0 and 1 */
-    percent: number;
-    /** Closest match to the colors in the CSS3 color module specfication */
-    css3: string;
-};
-
 type ColorCircleProps = {
     color: string;
-    css3: string;
     handleClick: HandleClickFn;
 };
 
 function createRequest(color: string): Request {
     const url = new URL('/images', APP_URL);
     url.search = new URLSearchParams({ color }).toString();
-    console.log('req url', url.toString());
 
     const request = new Request(url.toString(), {
         method: 'GET',
         cache: 'no-cache',
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json' },
     });
     return request;
 }
 
-function ColorCircle(props: ColorCircleProps) {
+function ColorCircle(props: ColorCircleProps): JSX.Element {
     const history = useHistory();
     const { color } = props;
     const urlEncodedColor = encodeURIComponent(color);
 
-    function handleMouseOver(event: MouseEvent) {
-        event.preventDefault();
-    }
-
     async function handleClick(event: MouseEvent) {
-        console.log('color circle color', color);
-
         event.preventDefault();
 
         const res = await fetch(createRequest(urlEncodedColor));
-        const artList = await res.json();
+        const artList = (await res.json()) as ArtObject[];
         props.handleClick(artList);
-        console.log('color circle art list', artList);
-        history.push(`/images?color=${urlEncodedColor}`)
+        history.push(`/images?color=${urlEncodedColor}`);
         sessionStorage.setItem(color, JSON.stringify(artList));
     }
 
     const colorCircleStyle = {
         backgroundColor: color,
-    }
+    };
 
     return (
-        <span key={color}
+        <button
+            key={color}
+            type="button"
+            aria-label="Search color"
             title={color}
             tabIndex={0}
             style={colorCircleStyle}
             className="Color-circle"
-            onMouseOver={handleMouseOver}
-            onClick={handleClick}>
-        </span>
-    )
+            onClick={handleClick}
+        />
+    );
 }
 
 type ColorListProps = {
@@ -96,17 +60,17 @@ type ColorListProps = {
     handleClick: HandleClickFn;
 };
 
-function ColorList(props: ColorListProps) {
+function ColorList(props: ColorListProps): JSX.Element {
     const { colors } = props;
 
     return (
         <figure className="Color-list">
             {colors.map((colorObj) => {
-                const { color, css3 } = colorObj;
-                return <ColorCircle key={color} color={color} css3={css3} handleClick={props.handleClick} />
+                const { color } = colorObj;
+                return <ColorCircle key={color} color={color} handleClick={props.handleClick} />;
             })}
         </figure>
-    )
+    );
 }
 
 type SuggestedColorsProps = {
@@ -114,7 +78,7 @@ type SuggestedColorsProps = {
     handleClick: HandleClickFn;
 };
 
-function SuggestedColors(props: SuggestedColorsProps) {
+function SuggestedColors(props: SuggestedColorsProps): JSX.Element {
     const suggestedColors: string[] = [
         '#af0019', // red
         '#c86432', // orange
@@ -125,27 +89,24 @@ function SuggestedColors(props: SuggestedColorsProps) {
         '#96644b', // brown
         '#646464', // grey
         '#000000', // black
-    ]
+    ];
 
-    const noResultsMessage = '0 results. Choose again?'
+    const noResultsMessage = '0 results. Choose again?';
+    const { numResults } = props;
 
     return (
         <div className="Color-suggestion">
             <div className="message">
-                {props.numResults === 0 && <p>{noResultsMessage}</p>}
+                {numResults === 0 && <p>{noResultsMessage}</p>}
                 <p>Some suggestions</p>
             </div>
             <figure className="Color-list">
-                {suggestedColors.map((color) => {
-                    return <ColorCircle key={color} color={color} css3={color} handleClick={props.handleClick} />
-                })}
+                {suggestedColors.map((color) => (
+                    <ColorCircle key={color} color={color} handleClick={props.handleClick} />
+                ))}
             </figure>
         </div>
-    )
+    );
 }
 
-export {
-    ColorList,
-    SuggestedColors,
-    createRequest
-};
+export { ColorList, SuggestedColors, createRequest };
