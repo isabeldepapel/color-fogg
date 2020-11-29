@@ -1,7 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import './style/Colors.css';
 import { ArtObject } from './Art';
+import './style/Colors.css';
 
 const APP_URL = process.env.REACT_APP_URL;
 
@@ -40,14 +40,6 @@ type ColorCircleProps = {
     handleClick: HandleClickFn;
 };
 
-type ColorCircleLinkProps = {
-    location: {
-        state: {
-            colorCircleProps: ColorCircleProps
-        }
-    }
-}
-
 function createRequest(color: string): Request {
     const url = new URL('/images', APP_URL);
     url.search = new URLSearchParams({ color }).toString();
@@ -80,6 +72,7 @@ function ColorCircle(props: ColorCircleProps) {
         props.handleClick(artList);
         console.log('color circle art list', artList);
         history.push(`/images?color=${urlEncodedColor}`)
+        sessionStorage.setItem(color, JSON.stringify(artList));
     }
 
     const colorCircleStyle = {

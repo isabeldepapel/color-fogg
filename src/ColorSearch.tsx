@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChromePicker } from 'react-color';
 import { useHistory } from 'react-router-dom';
-import { createRequest, HandleClickFn } from './Colors';
+import { HandleClickFn, createRequest } from './Colors';
 
 const DEFAULT_COLOR = '#646464';
 
@@ -56,13 +56,13 @@ function GetArt(props: GetArtProps) {
     const urlEncodedColor = encodeURIComponent(pickedColor);
 
 	async function handleClick() {
-		const res = await fetch(createRequest(urlEncodedColor));
-
+        const res = await fetch(createRequest(urlEncodedColor));
+        
 		try {
-			const artList = await res.json()
-			console.log('current art list', artList);
+            const artList = await res.json()
             props.handleClick(artList);
             history.push(`/images?color=${urlEncodedColor}`);
+            sessionStorage.setItem(pickedColor, JSON.stringify(artList));
 		} catch (err) {
 			// TODO: actual error handling
 			console.log(err);
