@@ -60,7 +60,7 @@ export type ArtObject = {
 export type HandleClickFn = (artList: ArtObject[]) => void;
 
 function createRequest(color: string): Request {
-    const url = new URL('/images', APP_URL);
+    const url = new URL('/api/images', APP_URL);
     url.search = new URLSearchParams({ color }).toString();
 
     const request = new Request(url.toString(), {

@@ -1,26 +1,12 @@
 import React, { MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ArtColor, ArtObject, HandleClickFn } from './helpers';
+import { ArtColor, ArtObject, createRequest, HandleClickFn } from './helpers';
 import './style/Colors.css';
-
-const APP_URL = process.env.REACT_APP_URL;
 
 type ColorCircleProps = {
     color: string;
     handleClick: HandleClickFn;
 };
-
-function createRequest(color: string): Request {
-    const url = new URL('/images', APP_URL);
-    url.search = new URLSearchParams({ color }).toString();
-
-    const request = new Request(url.toString(), {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: { 'content-type': 'application/json' },
-    });
-    return request;
-}
 
 function ColorCircle(props: ColorCircleProps): JSX.Element {
     const history = useHistory();
@@ -109,4 +95,4 @@ function SuggestedColors(props: SuggestedColorsProps): JSX.Element {
     );
 }
 
-export { ColorList, SuggestedColors, createRequest };
+export { ColorList, SuggestedColors };

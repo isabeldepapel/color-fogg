@@ -18,14 +18,12 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/images', methods=['GET'])
+@app.route('/api/images', methods=['GET'])
 def get_artwork_by_color():
     print('getting images')
     url_encoded_color = request.args.get('color')
     hex_color = urllib.parse.unquote(url_encoded_color)
-    # print(hex_color)
 
-    # url_encoded_color = urllib.parse.quote(hex_color)
     print('url color', url_encoded_color)
 
     # only retrieve objects with image urls, get first 10 at random
@@ -42,6 +40,12 @@ def get_artwork_by_color():
         num_results = (len(body['records']))
         beeline.add_context({'num_results': num_results})
         return json.dumps(body['records'])
+
+
+# handle browser refresh
+@app.route('/images', methods=['GET'])
+def refresh():
+    return app.send_static_file('index.html')
 
 
 @app.errorhandler(404)
